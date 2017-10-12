@@ -1,0 +1,461 @@
+<HTML>
+<HEAD>
+    <meta charset="utf-8">
+    <title>Peggy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="css/index.css">
+<script src="js/index.js"></script>
+
+<script language="JavaScript">
+var n, m, IsOver=true, Type=6, StartTime, EndTime, I_Sel, J_Sel, N_Sel;
+Pic= new Array(2);
+for (n=0; n<2; n++)
+  Pic[n]=new Array(2);
+for (n=0; n<2; n++)
+{ for (m=0; m<2; m++)
+  { Pic[n][m] = new Image(); 
+    Pic[n][m].src = "images/peg_"+eval(n)+eval(m)+".gif"; 
+  }
+}
+Fld=new Array(7);
+for (n=0; n<7; n++)
+  Fld[n]=new Array(7);
+RFld=new Array(7);
+for (n=0; n<7; n++)
+  RFld[n]=new Array(7);
+Solution= new Array(8);
+Solution[0]=new Array(17,19,31,16,19,10);
+Solution[1]=new Array(25,23,25,38,24,27,10,25,22);
+Solution[2]=new Array(17,19,4,2,25,4,19,10,24,9,22);
+Solution[3]=new Array(46,32,37,39,44,46,11,16,18,3,18,16,32,19,9,30,24,15,10);
+Solution[4]=new Array(25,39,34,39,23,37,28,37,25,11,11,23,25,9,26,24,10,22,31,10);
+Solution[5]=new Array(32,34,34,18,4,4,16,14,14,30,44,44,46,20,2,28,25,11,11,23,37,37,39,9,26,24,10,22,31,10);
+Solution[6]=new Array(10,15,2,4,23,2,37,28,14,31,28,33,46,44,25,46,11,20,34,17,19,20,31,33,33,19,17,15,15,29,24,26,38,23,26);
+Solution[7]=new Array();
+
+function random(nn)
+{ return(Math.floor(Math.random()*1000)%nn);
+}
+
+function Init(tt)
+{ var nn, mm;
+  IsOver=false;
+  if (tt>=0) Type=tt;
+  for (nn=0; nn<7; nn++)
+  { for (mm=0; mm<7; mm++)
+      Fld[nn][mm]=0;
+  }
+  if (Type==0) //Plus
+  { for (nn=1; nn<5; nn++)
+      Fld[nn][3]=1;
+    Fld[2][2]=1;
+    Fld[2][4]=1;
+  }
+  if (Type==1) //Cross
+  { for (nn=1; nn<6; nn++)
+    { Fld[nn][3]=1;
+      Fld[3][nn]=1;
+    }
+  }
+  if (Type==2) //Fireplace
+  { for (nn=0; nn<4; nn++)
+    { for (mm=2; mm<5; mm++)
+        Fld[nn][mm]=1;
+    }
+    Fld[3][3]=0;
+  }
+  if (Type==3) //Up Arrow
+  { for (nn=0; nn<3; nn++)
+    { for (mm=3-nn; mm<4+nn; mm++)
+        Fld[nn][mm]=1;
+    }
+    for (nn=3; nn<5; nn++)
+      Fld[nn][3]=1;
+    for (nn=5; nn<7; nn++)
+    { for (mm=2; mm<5; mm++)
+        Fld[nn][mm]=1;
+    }
+  }
+  if (Type==4) //Pyramid
+  { for (nn=1; nn<5; nn++)
+    { for (mm=4-nn; mm<3+nn; mm++)
+        Fld[nn][mm]=1;
+    }
+  }
+  if (Type==5) //Pyramid
+  { for (nn=0; nn<4; nn++)
+    { for (mm=3-nn; mm<4+nn; mm++)
+      { Fld[nn][mm]=1;
+        Fld[6-nn][mm]=1;
+      }
+    }
+    Fld[3][3]=0;
+  }
+  if (Type==6) //Solitaire
+  { for (nn=0; nn<7; nn++)
+    { for (mm=0; mm<7; mm++)
+        Fld[nn][mm]=1;
+    }
+    Fld[3][3]=0;
+  }
+  if (Type==7) //Random
+  { if (tt==-2)
+    { for (nn=0; nn<7; nn++)
+      { for (mm=0; mm<7; mm++)
+          Fld[nn][mm]=RFld[nn][mm];
+      }
+    }
+    else
+    { Solution[7].length=0;
+      Fld[3][3]=1;
+      var ii, ll=random(108), dd=random(4);
+      Jump(3,3,dd);
+      for (ii=0; ii<=ll; ii++)
+      { do 
+        { nn=random(7);
+          mm=random(7);
+        }
+        while (GetFld(nn,mm)!=1);
+        dd=random(4);
+        Jump(nn,mm,dd);
+      }
+      for (nn=0; nn<7; nn++)
+      { for (mm=0; mm<7; mm++)
+          RFld[nn][mm]=Fld[nn][mm];
+      }
+      mm=Solution[7].length-1;
+      for (ii=0; ii<mm/2; ii++)
+      { dd=Solution[7][ii];
+        Solution[7][ii]=Solution[7][mm-ii];
+        Solution[7][mm-ii]=dd;
+      }
+    }
+  }
+  N_Sel=0;
+  RefreshScreen();
+  Now = new Date();
+  StartTime = Now.getTime() / 1000;
+}
+
+function Jump(nn, mm, dd)
+{ var ll, ii=0, jj=0;
+  if (dd>6) return;
+  if (dd%4==0) ii=-1;
+  if (dd%4==1) ii=1;
+  if (dd%4==2) jj=-1;
+  if (dd%4==3) jj=1;
+  if ((GetFld(nn+ii,mm+jj)==0)&&(GetFld(nn+2*ii,mm+2*jj)==0))
+  { Fld[nn][mm]=0;
+    Fld[nn+ii][mm+jj]=1;
+    Fld[nn+2*ii][mm+2*jj]=1;
+    ll=Solution[7].length;
+    N_Sel=0;
+    if ((GetFld(nn+2*ii-1,mm+2*jj)==1)&&(GetFld(nn+2*ii-2,mm+2*jj)==0)) N_Sel++;
+    if ((GetFld(nn+2*ii+1,mm+2*jj)==1)&&(GetFld(nn+2*ii+2,mm+2*jj)==0)) N_Sel++;
+    if ((GetFld(nn+2*ii,mm+2*jj-1)==1)&&(GetFld(nn+2*ii,mm+2*jj-2)==0)) N_Sel++;
+    if ((GetFld(nn+2*ii,mm+2*jj+1)==1)&&(GetFld(nn+2*ii,mm+2*jj+2)==0)) N_Sel++;
+    if (N_Sel==1)
+      Solution[7][ll]=7*(nn+2*ii)+(mm+2*jj);
+    else
+    { Solution[7][ll]=7*nn+mm;
+      Solution[7][ll+1]=7*(nn+2*ii)+(mm+2*jj);
+    }
+    return;
+  }
+  else Jump(nn,mm,dd+1); 
+}
+
+function GetFld(ii,jj)
+{ if (ii<0) return(-1);
+  if (ii>6) return(-1);
+  if (jj<0) return(-1);
+  if (jj>6) return(-1);
+  if (((ii<2)||(ii>4))&&((jj<2)||(jj>4))) return(-1);
+  return(Fld[ii][jj]);
+}
+
+function Clicked(ii, jj)
+{ if (N_Sel==0)
+  { if (Fld[ii][jj]==0) return;
+    if ((GetFld(ii-1,jj)==1)&&(GetFld(ii-2,jj)==0))
+    { Fld[ii-2][jj]=2; Fld[ii][jj]=3; N_Sel+=1;
+    }
+    if ((GetFld(ii+1,jj)==1)&&(GetFld(ii+2,jj)==0))
+    { Fld[ii+2][jj]=2; Fld[ii][jj]=3; N_Sel+=2;
+    }
+    if ((GetFld(ii,jj-1)==1)&&(GetFld(ii,jj-2)==0))
+    { Fld[ii][jj-2]=2; Fld[ii][jj]=3; N_Sel+=4;
+    }
+    if ((GetFld(ii,jj+1)==1)&&(GetFld(ii,jj+2)==0))
+    { Fld[ii][jj+2]=2; Fld[ii][jj]=3; N_Sel+=8;
+    }
+    if (N_Sel==1)
+    { Fld[ii-2][jj]=1; Fld[ii-1][jj]=0; Fld[ii][jj]=0; N_Sel=0;
+      RefreshScreen(); OverTest(); return;
+    }
+    if (N_Sel==2)
+    { Fld[ii+2][jj]=1; Fld[ii+1][jj]=0; Fld[ii][jj]=0; N_Sel=0;
+      RefreshScreen(); OverTest(); return;
+    }
+    if (N_Sel==4)
+    { Fld[ii][jj-2]=1; Fld[ii][jj-1]=0; Fld[ii][jj]=0; N_Sel=0;
+      RefreshScreen(); OverTest(); return;
+    }
+    if (N_Sel==8)
+    { Fld[ii][jj+2]=1; Fld[ii][jj+1]=0; Fld[ii][jj]=0; N_Sel=0;
+      RefreshScreen(); OverTest(); return;
+    }
+    I_Sel=ii;
+    J_Sel=jj;
+    RefreshScreen();
+    return;
+  }
+  else
+  { if (Fld[ii][jj]<2) return;
+    if (N_Sel>=8) { Fld[I_Sel][J_Sel+2]=0; N_Sel-=8; }
+    if (N_Sel>=4) { Fld[I_Sel][J_Sel-2]=0; N_Sel-=4; }
+    if (N_Sel>=2) { Fld[I_Sel+2][J_Sel]=0; N_Sel-=2; }
+    if (N_Sel>=1) { Fld[I_Sel-2][J_Sel]=0; N_Sel-=1; }
+    if (Fld[ii][jj]==0)
+    { Fld[I_Sel][J_Sel]=0; 
+      Fld[(ii+I_Sel)/2][(jj+J_Sel)/2]=0;
+      Fld[ii][jj]=1;
+      RefreshScreen(); 
+      OverTest(); 
+      return;
+    }
+    Fld[I_Sel][J_Sel]=1;
+    RefreshScreen();
+    return;
+  }
+} 
+
+function OverTest()
+{ var nn, mm, ss=0;
+  if (IsOver) return;
+  for (nn=0; nn < 7; nn++)
+  { for (mm=0; mm < 7; mm++)
+      ss+=Fld[nn][mm];
+  }
+  if (ss>1) return;
+  IsOver=true;
+  Now = new Date();
+  EndTime = Now.getTime() / 1000;
+  nn=Math.floor(EndTime - StartTime);
+  //alert("Super, you solved this game in "+nn+ " seconds !");
+  //$("#go_score").text("Time ="+nn);
+  document.getElementById("go_score").innerText = "Time ="+nn;
+  var x = document.getElementById("first_screen");
+  var y = document.getElementById("game_screen");
+  var z = document.getElementById("final_container");
+  x.style.display = "none";
+  y.style.display = "none";
+  z.style.display = "block";
+
+}
+
+function RefreshScreen()
+{ var nn, mm;
+  for (nn=0; nn < 7; nn++)
+  { for (mm=0; mm < 7; mm++)
+    { if (((mm>1)&&(mm<5))||((nn>1)&&(nn<5)))
+        RefreshFld(nn, mm);
+    }
+  }
+}
+
+function RefreshFld(nn, mm)
+{ if (Fld[nn][mm]>1)
+    window.document.images[9*(nn+1)+mm+1].src = Pic[Fld[nn][mm]-2][1].src;
+  else
+    window.document.images[9*(nn+1)+mm+1].src = Pic[Fld[nn][mm]][0].src;
+}
+
+function Show()
+{ alert("Show is not solve !");
+  Init(-2);
+  IsOver=true;
+  setTimeout("Animation("+Type+",0)",1000);
+}
+
+function Animation(tt, nn)
+{ if (! IsOver) return;
+  if (nn<Solution[tt].length)
+  { var jj=Solution[tt][nn]%7;
+    var ii=(Solution[tt][nn]-jj)/7;
+    Clicked(ii,jj);
+    ii=nn+1;
+    if (N_Sel>0) 
+      Animation(tt,ii)
+    else
+    { RefreshScreen;
+      setTimeout("Animation("+tt+","+ii+")",1000);
+    }
+  }
+ 
+
+ 
+  else
+  { Init(-2);
+    IsOver=true;
+    setTimeout("Animation("+Type+",0)",1000);
+  }
+}
+
+function Help()
+{ alert("Jump with any peg horizontally or vertically"+
+      "\nacross an adjacent peg in an open space. The"+
+      "\npeg that has been \"jumped\" will automatically be"+
+      "\nremoved. The aim of the game is to jump all the"+
+      "\npegs until only one peg remains. Good luck!");
+}
+</script>
+</head>
+<!-- <BODY bgcolor=#ccaa88> -->
+<BODY bgcolor=#110044>
+
+  <!-- First screen -->
+
+<div class="first_screen" id="first_screen">
+ <div class="container-fluid">
+  
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="space_rows">
+      </div>
+    </div>
+
+
+    <div class="col-sm-4"><div class="splash_container">
+      <!--  <center>
+      <img src="images/icon.png" class="img-responsive"/>
+    </center>  -->
+      <div id="button_div">
+   <button class="play_btn btn btn-danger btn-lg">PLAY</button>
+ </div> 
+    </div>
+    </div>
+
+
+    <div class="col-sm-4">
+      <div class="space_rows">
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+  </div>
+
+
+<!-- End of First screen -->
+<div class="game_screen" id="game_screen">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+
+<DIV ALIGN=center>
+<br>
+<center>
+<table bgcolor=#ccaa88 noborder cellpadding=50 cellspacing=0>
+<tr><td><!-- <td background='images/peg_bg.png'> -->
+<script language="JavaScript">
+document.open();
+for (n=0; n < 9; n++)
+{ for (m=0; m < 9; m++)
+  { if (((n>0)&&(n<8)&&(m>2)&&(m<6))||((m>0)&&(m<8)&&(n>2)&&(n<6)))
+      document.write("<img src='images/peg_00.gif' border=0 onMouseDown='Clicked("+eval(n-1)+","+eval(m-1)+")'>");
+    else
+      document.write("<img src='images/peg_sp.gif' border=0>");
+  }
+  document.writeln("<BR>");
+}
+document.close();
+</script>
+</td></tr></table></center>
+
+  <center>
+<table noborder cellpadding=0 cellspacing=0><tr>
+<td><SELECT style="margin-right: 16px" onChange="Init(this.options[selectedIndex].value)" SIZE=1>
+  <OPTION VALUE=0>Cross
+  <OPTION VALUE=1>Plus
+  <OPTION VALUE=2>Fireplace
+  <OPTION VALUE=3>Up Arrow
+  <OPTION VALUE=4>Pyramid
+  <OPTION VALUE=5>Diamond
+  <OPTION VALUE=6 selected>Solitaire
+  <OPTION VALUE=7>Random
+</SELECT></td>
+<td><input style="margin-right: 16px" type=button value="New" width=45 style="width:45" onClick="javascript:Init(-1)"></td>
+<td><input type=button value="Repeat" width=70 style="width:70" onClick="javascript:Init(-2)"></td>
+<!-- <td><input type=button value="Show" width=60 style="width:60" onClick="javascript:Show()"></td>
+<td><input type=button value="Help" width=50 style="width:50" onClick="javascript:Help()"></td> -->
+</tr></table> </center>
+</DIV>
+
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- Loding next level ending screen -->
+<div class="final_container" id="final_container">
+<div class="container">
+<div class="row">
+    <div class="col-sm-2"><div class="space_rows"></div></div>
+
+
+    <div class="col-sm-8">
+      <div class="result_container">
+        <div class="animated zoomIn">
+          <h1 id="score" class="text-center">Your Score:</h1>
+          <center>
+           <span id="go_score">0</span>
+         </center>
+
+          <center>
+          <p id="fails">
+      <strong id="textValue" style="color:red;">Cheer! 
+        you did your best to become the best that you are capable of becoming. Effort to collect more & build up the points!</strong>
+      </p>
+       <center>
+
+       <div id="restart_moregames">
+     <a href="#" id="retry" class ="retry">Retry</a>
+    <a href="http://sosimplegames.com/" target="_blank">More Games</a>
+  </div>
+  <center>
+  <p id="tags">
+      <strong style="color:red;"  id="share_text">TAG, you're it! CHALLENGE your FRIENDS by tagging them in the post. To share click on "SHARE ON FACEBOOK" button.</strong>
+      </p>
+    </center>
+
+      <div id="share" class="text-center">Share on facebook</div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-sm-2"><div class="space_rows"></div></div>
+
+</div>
+</div>
+</div>
+
+
+
+<script language="JavaScript">
+  Init(6);
+</script>
+
+</BODY>
+</HTML>

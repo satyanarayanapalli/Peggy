@@ -1,0 +1,123 @@
+body
+{
+  width: 100%;
+  height: 100%;
+  background-color:#87CEFA;
+}
+.first_screen
+{
+	width:100%;
+	height:100%;
+}
+.space_rows
+{
+	min-height:20%;
+
+}
+
+.splash_container
+{
+	
+	background-color:#87CEFA;
+}
+#button_div
+{
+  width: 100%;
+  height: 100%;
+  display:flex;
+  align-items:center;  /*vertically aligned! */
+  justify-content: center;
+ 
+  
+}
+
+
+/*//////////////////////////*/
+
+.game_screen
+{
+	width:100%;
+	height:100%;
+	display:none;
+	margin-top: 5%;
+
+}
+
+
+   .final_container
+  {
+    width: 100%;
+    height: 100%;
+    display: none;
+   
+  }
+  
+  
+
+  #share
+  {
+    width: 100%;
+    margin-top: 15%;
+
+
+  }
+
+  .result_container
+{
+  background-color: #ffffff;
+  width: 100%;
+  height: 90%;
+  border: 7px solid #1E90FF;
+  border-radius: 20px;
+  overflow: auto;
+  margin-top: 5%;
+}
+
+ #fails
+   {
+      margin-top: 5%;
+   }
+    #restart_moregames
+  {
+    width: 100%;
+    height: 10%;
+    margin-top: 5%;
+  
+  }
+
+  #tags
+    {
+      margin-top: 5%;
+      font-size: 1rem;
+    }
+
+html
+{
+  font-size: 20px;
+}
+h1
+{
+  font-size: 3rem;
+}
+
+#go_score
+{
+  font-size: 2rem;
+}
+#textValue
+{
+  font-size: 1rem;
+}
+
+.retry
+{
+  float: left;
+  margin-left: 5%;
+  cursor: pointer;
+  color: #1E90FF;
+}
+
+a{
+  float: right;
+  margin-right: 5%;
+}
