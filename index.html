@@ -11,6 +11,15 @@
 
 <script language="JavaScript">
 var n, m, IsOver=true, Type=6, StartTime, EndTime, I_Sel, J_Sel, N_Sel;
+var interval;
+ var x = document.getElementById("first_screen");
+  var y = document.getElementById("game_screen");
+  var z = document.getElementById("final_container");
+
+  var mnts_cnt1=0, mnts_cnt2=0;
+    var seconds1 =0,seconds2=0;
+    var total_time=0;
+
 Pic= new Array(2);
 for (n=0; n<2; n++)
   Pic[n]=new Array(2);
@@ -35,6 +44,65 @@ Solution[4]=new Array(25,39,34,39,23,37,28,37,25,11,11,23,25,9,26,24,10,22,31,10
 Solution[5]=new Array(32,34,34,18,4,4,16,14,14,30,44,44,46,20,2,28,25,11,11,23,37,37,39,9,26,24,10,22,31,10);
 Solution[6]=new Array(10,15,2,4,23,2,37,28,14,31,28,33,46,44,25,46,11,20,34,17,19,20,31,33,33,19,17,15,15,29,24,26,38,23,26);
 Solution[7]=new Array();
+
+function play_function()
+{
+  interval=setInterval(function()
+    {
+      updateDisplay()
+    },1000);
+    x = document.getElementById("first_screen");
+   y = document.getElementById("game_screen");
+   z = document.getElementById("final_container");
+  x.style.display = "none";
+  y.style.display = "block";
+  z.style.display = "none";
+}
+
+function  updateDisplay()
+{
+   seconds1++;
+        if(seconds1==10)
+          {
+             var scd1 = document.getElementById("seconds2");
+            scd1.style.display = "none";
+          }
+
+           if(seconds1%60==0)
+        {
+          mnts_cnt1++;
+          seconds1=0;
+          var scd2 = document.getElementById("seconds2");
+            scd2.style.display = "inline-block";
+          
+
+          if(mnts_cnt1==10)
+          {
+            var mnt2 = document.getElementById("mnts2");
+            mnt2.style.display = "none";
+            
+          }
+
+          if(mnts_cnt1%60==0)
+          {
+            hour1++;
+            mnts_cnt1=0;
+            var mnt2 = document.getElementById("mnts2");
+            mnt2.style.display = "block";
+            
+          }
+          
+            document.getElementById("mnts1").innerHTML=mnts_cnt1; 
+          
+        }
+        document.getElementById("seconds1").innerHTML=seconds1; 
+        total_time="0"+mnts_cnt1+":"+seconds1;
+
+
+
+        
+  
+}
 
 function random(nn)
 { return(Math.floor(Math.random()*1000)%nn);
@@ -249,9 +317,12 @@ function OverTest()
   //alert("Super, you solved this game in "+nn+ " seconds !");
   //$("#go_score").text("Time ="+nn);
   //document.getElementById("go_score").innerText = "Time ="+nn;
-  var x = document.getElementById("first_screen");
-  var y = document.getElementById("game_screen");
-  var z = document.getElementById("final_container");
+  clearInterval(interval);
+  document.getElementById("go_score").innerText = total_time;
+  x = document.getElementById("first_screen");
+   y = document.getElementById("game_screen");
+   z = document.getElementById("final_container");
+ 
   x.style.display = "none";
   y.style.display = "none";
   z.style.display = "block";
@@ -284,12 +355,33 @@ function Show()
 
 function myretry()
 {
+
+          interval=setInterval(function()
+            {
+              updateDisplay();
+            } ,1000);           
+
+             mnts_cnt1=0, mnts_cnt2=0;
+             seconds1 =0,seconds2=0;
+             var total_time=0;
+             total_time="0"+mnts_cnt1+":0"+seconds1;
+               document.getElementById("go_score").innerText =total_time;
+
+
+
+             var scd2 = document.getElementById("seconds2");
+            scd2.style.display = "inline-block";
+        var mnt2 = document.getElementById("mnts2");
+            mnt2.style.display = "inline-block";
+             
+
   var x = document.getElementById("first_screen");
   var y = document.getElementById("game_screen");
   var z = document.getElementById("final_container");
   x.style.display = "none";
   y.style.display = "block";
   z.style.display = "none";
+ 
   Init(-2);
 }
 
@@ -338,7 +430,7 @@ function Help()
 
 
 <div class="timer_restart_div">
-        <div class="timer">TIME: <span id="mnts2">0</span><span id="mnts1">0</span>:<span class="seconds2">0</span><span class="seconds1">0</span></div>
+        <div class="timer">TIME: <span id="mnts2">0</span><span id="mnts1">0</span>:<span id="seconds2">0</span><span id="seconds1">0</span></div>
         <!-- <span class="restart">RESTART</span> -->
         <input style="margin-left: 16px" type=button class="btn btn-primary btn-sm restart" value="Repeat" onClick="javascript:Init(-2)">
 
@@ -495,7 +587,7 @@ document.close();
 </div>
     </center> -->
       <div id="button_div">
-   <button class="play_btn btn btn-danger btn-lg">PLAY</button>
+   <button class="play_btn btn btn-danger btn-lg" onClick="play_function()">PLAY</button>
  </div> 
 
 
