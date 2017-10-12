@@ -282,6 +282,17 @@ function Show()
   setTimeout("Animation("+Type+",0)",1000);
 }
 
+function myretry()
+{
+  var x = document.getElementById("first_screen");
+  var y = document.getElementById("game_screen");
+  var z = document.getElementById("final_container");
+  x.style.display = "none";
+  y.style.display = "block";
+  z.style.display = "none";
+  Init(-2);
+}
+
 function Animation(tt, nn)
 { if (! IsOver) return;
   if (nn<Solution[tt].length)
@@ -424,7 +435,7 @@ document.close();
        <center>
 
        <div id="restart_moregames">
-     <a href="#" id="retry" class ="retry">Retry</a>
+     <a href="#" id="retry" class ="retry" onClick="javascript:myretry()">Retry</a>
     <a href="http://sosimplegames.com/" target="_blank">More Games</a>
   </div>
   <center>

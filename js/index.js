@@ -61,7 +61,7 @@ document.getElementById("go_score").innerText = total_time;
         }
         $('.timer').find('.seconds1').text(seconds1);
         
-     if ($('#first_screen').css('display') == 'none'  && $('#game_screen').css('display') == 'none' && $('#final_container').css('display') == 'block') {
+     if ($('#first_screen').css('display') == 'none'  && $('#game_screen').css('display') == 'none') {
                  clearInterval(interval);
                  
             }
@@ -69,6 +69,18 @@ document.getElementById("go_score").innerText = total_time;
 
       
       }
+
+      $(".retry").click(function()
+        {
+          interval=setInterval(updateDisplay,1000);
+             mnts_cnt1=0, mnts_cnt2=0;
+             seconds1 =0,seconds2=0;
+             total_time=0;
+             total_time="0"+mnts_cnt1+":"+seconds1;
+             $('.seconds2').show();
+             $('#mnts2').show();
+             
+        });
 
     
   });
