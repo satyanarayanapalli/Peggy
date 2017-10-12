@@ -208,6 +208,7 @@ function Clicked(ii, jj)
     { Fld[ii][jj+2]=1; Fld[ii][jj+1]=0; Fld[ii][jj]=0; N_Sel=0;
       RefreshScreen(); OverTest(); return;
     }
+    
     I_Sel=ii;
     J_Sel=jj;
     RefreshScreen();
@@ -315,7 +316,7 @@ function Help()
 </script>
 </head>
 <!-- <BODY bgcolor=#ccaa88> -->
-<BODY bgcolor=#110044>
+<BODY>
 
 
 <div class="game_screen" id="game_screen">
@@ -324,11 +325,26 @@ function Help()
     <div class="col-sm-4"></div>
     <div class="col-sm-4">
 
+
+<div class="timer_restart_div">
+        <div class="timer">TIME: <span id="mnts2">0</span><span id="mnts1">0</span>:<span class="seconds2">0</span><span class="seconds1">0</span></div>
+        <!-- <span class="restart">RESTART</span> -->
+        <input style="margin-left: 16px" type=button class="btn btn-primary btn-sm restart" value="Repeat" onClick="javascript:Init(-2)">
+
+     <!--    <input  class="btn btn-primary btn-sm new_btn" type=button value="New"  onClick="javascript:Init(-1)"> -->
+      </div>
+
+
+
+<!-- <input style="margin-left: 16px" type=button class="btn btn-primary btn-sm repeat" value="Repeat" onClick="javascript:Init(-2)">
+
+<input  class="btn btn-primary btn-sm new_btn" type=button value="New"  onClick="javascript:Init(-1)"> -->
 <DIV ALIGN=center>
 <br>
+
 <center>
-<table bgcolor=#ccaa88 noborder cellpadding=50 cellspacing=0>
-<tr><td><!-- <td background='images/peg_bg.png'> -->
+<table noborder cellpadding=50 cellspacing=0>
+<tr><td background='images/peg_bg.gif'>
 <script language="JavaScript">
 document.open();
 for (n=0; n < 9; n++)
@@ -346,7 +362,21 @@ document.close();
 
   <center>
 <table noborder cellpadding=0 cellspacing=0><tr>
-<td><SELECT style="margin-right: 16px" onChange="Init(this.options[selectedIndex].value)" SIZE=1>
+
+
+  <!-- <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="#">HTML</a></li>
+      <li><a href="#">CSS</a></li>
+      <li><a href="#">JavaScript</a></li>
+    </ul>
+  </div> -->
+
+
+
+<!-- <td><SELECT style="margin-right: 16px" onChange="Init(this.options[selectedIndex].value)" SIZE=1>
   <OPTION VALUE=0>Cross
   <OPTION VALUE=1>Plus
   <OPTION VALUE=2>Fireplace
@@ -355,9 +385,9 @@ document.close();
   <OPTION VALUE=5>Diamond
   <OPTION VALUE=6 selected>Solitaire
   <OPTION VALUE=7>Random
-</SELECT></td>
-<td><input style="margin-right: 16px" type=button value="New" width=45 style="width:45" onClick="javascript:Init(-1)"></td>
-<td><input type=button value="Repeat" width=70 style="width:70" onClick="javascript:Init(-2)"></td>
+</SELECT></td> -->
+<!-- <td><input style="margin-right: 16px" class="btn btn-primary btn-sm" type=button value="New" width=45 style="width:45" onClick="javascript:Init(-1)"></td> -->
+<!-- <td><input type=button class="btn btn-primary btn-sm" value="Repeat" width=70 style="width:70" onClick="javascript:Init(-2)"></td> -->
 <!-- <td><input type=button value="Show" width=60 style="width:60" onClick="javascript:Show()"></td>
 <td><input type=button value="Help" width=50 style="width:50" onClick="javascript:Help()"></td> -->
 </tr></table> </center>
@@ -435,9 +465,29 @@ document.close();
        <center>
       <img src="images/icon.png" class="img-responsive"/>
     </center> 
+<!--     <center>
+
+ <div class="container-fluid">
+  <h2>Form control: inline radio buttons</h2>
+  <p>The form below contains three inline radio buttons:</p>
+  <form>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Beginner
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Intermediate
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="optradio">Expert
+    </label>
+  </form>
+</div>
+    </center> -->
       <div id="button_div">
    <button class="play_btn btn btn-danger btn-lg">PLAY</button>
  </div> 
+
+
     </div>
     </div>
 
