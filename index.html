@@ -7,7 +7,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="css/index.css">
-<script src="js/index.js"></script>
+
 
 <script language="JavaScript">
 var n, m, IsOver=true, Type=6, StartTime, EndTime, I_Sel, J_Sel, N_Sel;
@@ -47,6 +47,26 @@ Solution[7]=new Array();
 
 function play_function()
 {
+var beginner_checked  = document.getElementById("beginner").checked;
+var intermediate_checked = document.getElementById("intermediate").checked;
+var expert_checkd = document.getElementById("expert").checked;
+
+if(beginner_checked==true || intermediate_checked==true || expert_checkd==true )
+{
+
+  if(beginner_checked==true)
+  {
+    Init(1);
+  }
+  else if(intermediate_checked==true)
+  {
+    Init(3);
+  }
+  else
+  {
+    Init(5);
+  }
+
   interval=setInterval(function()
     {
       updateDisplay()
@@ -57,6 +77,13 @@ function play_function()
   x.style.display = "none";
   y.style.display = "block";
   z.style.display = "none";
+}
+else
+{
+  alert("Choose Level");
+}
+
+
 }
 
 function  updateDisplay()
@@ -356,16 +383,18 @@ function Show()
 function myretry()
 {
 
-          interval=setInterval(function()
-            {
-              updateDisplay();
-            } ,1000);           
+              location.reload();     
 
-             mnts_cnt1=0, mnts_cnt2=0;
+            /* mnts_cnt1=0, mnts_cnt2=0;
              seconds1 =0,seconds2=0;
              var total_time=0;
              total_time="0"+mnts_cnt1+":0"+seconds1;
                document.getElementById("go_score").innerText =total_time;
+
+            interval=setInterval(function()
+            {
+              updateDisplay();
+            } ,1000); 
 
 
 
@@ -382,7 +411,7 @@ function myretry()
   y.style.display = "block";
   z.style.display = "none";
  
-  Init(-2);
+  Init(-2);*/
 }
 
 function Animation(tt, nn)
@@ -432,7 +461,7 @@ function Help()
 <div class="timer_restart_div">
         <div class="timer">TIME: <span id="mnts2">0</span><span id="mnts1">0</span>:<span id="seconds2">0</span><span id="seconds1">0</span></div>
         <!-- <span class="restart">RESTART</span> -->
-        <input style="margin-left: 16px" type=button class="btn btn-primary btn-sm restart" value="Repeat" onClick="javascript:Init(-2)">
+        <input style="margin-left: 16px" type=button class="btn btn-primary btn-sm restart" value="Retry" onClick="javascript:Init(-2)">
 
      <!--    <input  class="btn btn-primary btn-sm new_btn" type=button value="New"  onClick="javascript:Init(-1)"> -->
       </div>
@@ -568,24 +597,27 @@ document.close();
        <center>
       <img src="images/icon.png" class="img-responsive"/>
     </center> 
-<!--     <center>
+    <center>
 
  <div class="container-fluid">
-  <h2>Form control: inline radio buttons</h2>
-  <p>The form below contains three inline radio buttons:</p>
+  <p>"Jump with any peg horizontally or vertically
+      across an adjacent peg in an open space. The
+      peg that has been \"jumped\" will automatically be
+      removed. The aim of the game is to jump all the
+      pegs until only one peg remains. Good luck!"</p>
   <form>
     <label class="radio-inline">
-      <input type="radio" name="optradio">Beginner
+      <input type="radio" name="optradio" id="beginner">Beginner
     </label>
     <label class="radio-inline">
-      <input type="radio" name="optradio">Intermediate
+      <input type="radio" name="optradio" id="intermediate">Intermediate
     </label>
     <label class="radio-inline">
-      <input type="radio" name="optradio">Expert
+      <input type="radio" name="optradio" id="expert">Expert
     </label>
   </form>
 </div>
-    </center> -->
+    </center>
       <div id="button_div">
    <button class="play_btn btn btn-danger btn-lg" onClick="play_function()">PLAY</button>
  </div> 
@@ -610,9 +642,9 @@ document.close();
 <!-- End of First screen -->
 
 
-<script language="JavaScript">
+<!-- /*<script language="JavaScript">
   Init(1);
-</script>
+</script>*/ -->
 
 </BODY>
 </HTML>
